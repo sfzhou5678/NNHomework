@@ -1,5 +1,6 @@
 import os
 import random
+import time
 import scipy.io
 import tensorflow as tf
 import numpy as np
@@ -90,7 +91,7 @@ def run_epoch(data, label, batch_size,
                              model.label: target_label})
     loss_sum += loss
     acc_sum += acc
-  print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
+    # print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
 
 
 def train():
@@ -100,38 +101,53 @@ def train():
   test_data, test_label = get_data(data_folder, 'test_data', 'test_label')
   print(len(test_label))
 
-  hid_size = 100
-  lr = 1e-2
-  train_config = MLPConfig(64, hidden_size=hid_size, learnig_rate=lr)
-  test_config = MLPConfig(len(test_label), hidden_size=hid_size, learnig_rate=lr)
+  res_file = open('res_file.log', 'w')
+  lr_list = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5,
+             5e-1, 5e-2, 5e-3, 5e-4, 5e-5]
+  for hid_size in range(10, 200, 10):
+    for lr, lr_no in zip(lr_list, range(len(lr_list))):
 
-  initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
-  with tf.name_scope('Train'):
-    with tf.variable_scope("Model", reuse=None, initializer=initializer):
-      train_model = MLPModel(config=train_config)
+      train_config = MLPConfig(64, hidden_size=hid_size, learnig_rate=lr)
+      test_config = MLPConfig(len(test_label), hidden_size=hid_size, learnig_rate=lr)
 
-  with tf.name_scope('Valid'):
-    with tf.variable_scope("Model", reuse=True):
-      test_model = MLPModel(config=test_config)
+      initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
+      with tf.name_scope('Train'):
+        with tf.variable_scope("Model-%d-%d" % (hid_size, lr_no), reuse=None, initializer=initializer):
+          train_model = MLPModel(config=train_config)
 
-  sess_config = tf.ConfigProto()
-  sess_config.gpu_options.allow_growth = True
-  with tf.Session(config=sess_config) as sess:
-    tf.global_variables_initializer().run()
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+      with tf.name_scope('Valid'):
+        with tf.variable_scope("Model-%d-%d" % (hid_size, lr_no), reuse=True):
+          test_model = MLPModel(config=test_config)
 
-    for i in range(100):
-      run_epoch(train_data, train_label, train_config.batch_size,
-                sess, train_model)
+      sess_config = tf.ConfigProto()
+      sess_config.gpu_options.allow_growth = True
+      with tf.Session(config=sess_config) as sess:
+        tf.global_variables_initializer().run()
+        coord = tf.train.Coordinator()
+        threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-      test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
-                                     {test_model.input: test_data,
-                                      test_model.label: test_label})
-      print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
-      print()
-    coord.request_stop()
-    coord.join(threads)
+        time0 = time.time()
+        best_test_acc = 0
+        for i in range(20):
+          run_epoch(train_data, train_label, train_config.batch_size,
+                    sess, train_model)
+
+          test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
+                                         {test_model.input: test_data,
+                                          test_model.label: test_label})
+          # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
+          # print()
+          best_test_acc = max(best_test_acc, test_acc)
+
+        # hidden_size, learning_rate, best_test_acc
+        used_time = time.time() - time0
+        print('{}\t{}\t{}\t{}'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+        res_file.write(
+          '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+        res_file.flush()
+
+        coord.request_stop()
+        coord.join(threads)
 
 
 if __name__ == '__main__':
