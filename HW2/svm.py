@@ -18,9 +18,7 @@ def get_data(data_folder, data_filename, label_filename):
 def standard_svm():
   # data_folder = '../HW1/hw1_data'
   # train_data, train_label = get_data(data_folder, 'train_data', 'train_label')
-  # # print(len(train_label))
   # test_data, test_label = get_data(data_folder, 'test_data', 'test_label')
-  # # print(len(test_label))
 
 
   data_folder = 'hw2_data'
@@ -32,6 +30,7 @@ def standard_svm():
 
   time0 = time.time()
   clf = SVC(kernel='rbf', C=1.0, probability=True)
+  clf.decision_function_shape='ovr'
   clf.fit(train_data, train_label)
   # print(clf.predict_proba(test_data))
   pred = clf.predict(test_data)
@@ -66,16 +65,16 @@ def get_new_data(data, label, index_to_label):
 
 
 def one_rest_svm():
-  # data_folder = '../HW1/hw1_data'
-  # train_data, train_label = get_data(data_folder, 'train_data', 'train_label')
-  # test_data, test_label = get_data(data_folder, 'test_data', 'test_label')
-
-  data_folder = 'hw2_data'
-  train_data = np.load(os.path.join(data_folder, 'train_data.npy'))
-  train_label = np.load(os.path.join(data_folder, 'train_label.npy'))
-
-  test_data = np.load(os.path.join(data_folder, 'test_data.npy'))
-  test_label = np.load(os.path.join(data_folder, 'test_label.npy'))
+  data_folder = '../HW1/hw1_data'
+  train_data, train_label = get_data(data_folder, 'train_data', 'train_label')
+  test_data, test_label = get_data(data_folder, 'test_data', 'test_label')
+  #
+  # data_folder = 'hw2_data'
+  # train_data = np.load(os.path.join(data_folder, 'train_data.npy'))
+  # train_label = np.load(os.path.join(data_folder, 'train_label.npy'))
+  #
+  # test_data = np.load(os.path.join(data_folder, 'test_data.npy'))
+  # test_label = np.load(os.path.join(data_folder, 'test_label.npy'))
 
   time0 = time.time()
   n_classes = 3
