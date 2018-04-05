@@ -32,6 +32,10 @@ class MnistModel(object):
 
     self.acc = tf.reduce_mean(tf.cast(tf.nn.in_top_k(predictions=self.logits, targets=self.label, k=1), tf.float32))
 
+    tf.summary.scalar("loss", self.loss)
+    tf.summary.scalar("accuracy", self.acc)
+    self.summary = tf.summary.merge_all()
+
   def _get_mlp_logits(self, input, config):
     net = slim.fully_connected(input, config.hidden_size, activation_fn=tf.sigmoid, scope='hidden_layer')
     net = slim.fully_connected(net, config.output_dim, activation_fn=None, scope='output_layer')
@@ -101,8 +105,13 @@ class LeNetConfig(MLPConfig):
     self.input_dim = 1
 
 
+epoch = 0
+
+
 def run_epoch(data, label, batch_size,
-              sess, model):
+              sess, model, summary_wirite):
+  global epoch
+
   times = len(label) // batch_size
   temp_tuple = [(data[i], label[i]) for i in range(len(label))]
   random.shuffle(temp_tuple)
@@ -116,12 +125,14 @@ def run_epoch(data, label, batch_size,
     input_data = data[i * batch_size:(i + 1) * batch_size]
     target_label = label[i * batch_size:(i + 1) * batch_size]
 
-    _, loss, acc = sess.run([model.train_op, model.loss, model.acc],
-                            {model.input: input_data,
-                             model.label: target_label})
+    _, loss, acc, summary = sess.run([model.train_op, model.loss, model.acc, model.summary],
+                                     {model.input: input_data,
+                                      model.label: target_label})
+    summary_wirite.add_summary(summary, epoch * times + i)
     loss_sum += loss
     acc_sum += acc
   print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
+  epoch += 1
 
 
 def train_MLP():
@@ -157,6 +168,8 @@ def train_MLP():
     with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
       test_model = MnistModel(config=test_config)
 
+  log_path = 'mlplog'
+  writer = tf.summary.FileWriter(log_path, graph=tf.get_default_graph())
   sess_config = tf.ConfigProto()
   sess_config.gpu_options.allow_growth = True
   with tf.Session(config=sess_config) as sess:
@@ -166,9 +179,10 @@ def train_MLP():
 
     time0 = time.time()
     best_test_acc = 0
+
     for i in range(50):
       run_epoch(train_data, train_label, train_config.batch_size,
-                sess, train_model)
+                sess, train_model, writer)
 
       test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
                                      {test_model.input: test_data,
@@ -217,6 +231,9 @@ def trainLeNet():
     with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
       test_model = MnistModel(config=test_config)
 
+  log_path = 'cnnlog/slim_cnn.log'
+  writer = tf.summary.FileWriter(log_path, graph=tf.get_default_graph())
+
   sess_config = tf.ConfigProto()
   sess_config.gpu_options.allow_growth = True
   with tf.Session(config=sess_config) as sess:
@@ -228,7 +245,7 @@ def trainLeNet():
     best_test_acc = 0
     for i in range(20):
       run_epoch(train_data, train_label, train_config.batch_size,
-                sess, train_model)
+                sess, train_model, writer)
 
       test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
                                      {test_model.input: test_data,
@@ -249,5 +266,5 @@ def trainLeNet():
 
 
 if __name__ == '__main__':
-  # train_MLP()
-  trainLeNet()
+  train_MLP()
+  # trainLeNet()
