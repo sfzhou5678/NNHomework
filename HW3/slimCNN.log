@@ -1,0 +1,87 @@
+C:\Users\hasee\Anaconda3\python.exe D:/MyProjectsRepertory/PythonProject/NNHomework/HW3/main.py
+Extracting mnist_data\train-images-idx3-ubyte.gz
+Extracting mnist_data\train-labels-idx1-ubyte.gz
+Extracting mnist_data\t10k-images-idx3-ubyte.gz
+Extracting mnist_data\t10k-labels-idx1-ubyte.gz
+2018-04-05 14:23:06.306320: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.306619: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.306931: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.307473: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.307691: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.308219: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.308541: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.308799: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 14:23:06.668052: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:940] Found device 0 with properties:
+  name: GeForce GTX 1060
+major: 6 minor: 1 memoryClockRate (GHz) 1.6705
+pciBusID 0000:01:00.0
+Total memory: 6.00GiB
+Free memory: 4.99GiB
+2018-04-05 14:23:06.668916: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:961] DMA: 0
+2018-04-05 14:23:06.669155: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:971] 0:   Y
+2018-04-05 14:23:06.669328: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:1030] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1060, pci bus id: 0000:01:00.0)
+trainLoss 0.379  trainAcc 0.899
+2018-04-05 14:23:15.633406: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 2.59GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+2018-04-05 14:23:15.633881: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\bfc_allocator.cc:217] Allocator (GPU_0_bfc) ran out of memory trying to allocate 1.95GiB. The caller indicates that this is not a failure, but may mean that there could be performance gains if more memory is available.
+  testLoss 0.124  testAcc 0.963
+
+trainLoss 0.084  trainAcc 0.975
+testLoss 0.082  testAcc 0.975
+
+trainLoss 0.050  trainAcc 0.985
+testLoss 0.086  testAcc 0.975
+
+trainLoss 0.034  trainAcc 0.990
+testLoss 0.068  testAcc 0.980
+
+trainLoss 0.023  trainAcc 0.994
+testLoss 0.064  testAcc 0.981
+
+trainLoss 0.016  trainAcc 0.996
+testLoss 0.063  testAcc 0.981
+
+trainLoss 0.011  trainAcc 0.998
+testLoss 0.060  testAcc 0.983
+
+trainLoss 0.008  trainAcc 0.999
+testLoss 0.060  testAcc 0.983
+
+trainLoss 0.006  trainAcc 0.999
+testLoss 0.061  testAcc 0.984
+
+trainLoss 0.004  trainAcc 0.999
+testLoss 0.061  testAcc 0.983
+
+trainLoss 0.004  trainAcc 1.000
+testLoss 0.062  testAcc 0.983
+
+trainLoss 0.003  trainAcc 1.000
+testLoss 0.061  testAcc 0.984
+
+trainLoss 0.003  trainAcc 1.000
+testLoss 0.062  testAcc 0.984
+
+trainLoss 0.003  trainAcc 1.000
+testLoss 0.063  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.063  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.064  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.063  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.065  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.065  testAcc 0.984
+
+trainLoss 0.002  trainAcc 1.000
+testLoss 0.064  testAcc 0.985
+
+200	0.001	0.9846001267433167	156.0043225288391
+
+Process finished with exit code 0

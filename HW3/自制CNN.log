@@ -1,0 +1,61 @@
+trainLoss 0.802  trainAcc 0.824
+testLoss 0.282  testAcc 0.912
+
+trainLoss 0.259  trainAcc 0.921
+testLoss 0.213  testAcc 0.933
+
+trainLoss 0.198  trainAcc 0.939
+testLoss 0.180  testAcc 0.943
+
+trainLoss 0.165  trainAcc 0.949
+testLoss 0.155  testAcc 0.951
+
+trainLoss 0.145  trainAcc 0.955
+testLoss 0.138  testAcc 0.958
+
+trainLoss 0.130  trainAcc 0.960
+testLoss 0.141  testAcc 0.957
+
+trainLoss 0.119  trainAcc 0.963
+testLoss 0.123  testAcc 0.963
+
+trainLoss 0.109  trainAcc 0.966
+testLoss 0.117  testAcc 0.965
+
+trainLoss 0.101  trainAcc 0.968
+testLoss 0.114  testAcc 0.967
+
+trainLoss 0.095  trainAcc 0.971
+testLoss 0.114  testAcc 0.967
+
+trainLoss 0.090  trainAcc 0.973
+testLoss 0.110  testAcc 0.967
+
+trainLoss 0.084  trainAcc 0.974
+testLoss 0.103  testAcc 0.969
+
+trainLoss 0.081  trainAcc 0.975
+testLoss 0.103  testAcc 0.970
+
+trainLoss 0.076  trainAcc 0.976
+testLoss 0.094  testAcc 0.973
+
+trainLoss 0.073  trainAcc 0.977
+testLoss 0.094  testAcc 0.973
+
+trainLoss 0.070  trainAcc 0.978
+testLoss 0.090  testAcc 0.974
+
+trainLoss 0.067  trainAcc 0.979
+testLoss 0.090  testAcc 0.974
+
+trainLoss 0.064  trainAcc 0.980
+testLoss 0.093  testAcc 0.974
+
+trainLoss 0.062  trainAcc 0.980
+testLoss 0.090  testAcc 0.975
+
+trainLoss 0.060  trainAcc 0.981
+testLoss 0.087  testAcc 0.975
+
+200	0.001	0.974800169467926	72.35961651802063
