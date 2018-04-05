@@ -45,17 +45,6 @@ def get_data(data_folder, data_filename, label_filename):
   data = scipy.io.loadmat(os.path.join(data_folder, data_filename + ".mat", ))[data_filename]
   label = scipy.io.loadmat(os.path.join(data_folder, label_filename + ".mat", ))[label_filename]
 
-  # do_norm = True
-  # if do_norm:
-  #   new_data = []
-  #   for d in data:
-  #     max_d = max(d)
-  #     min_d = min(d)
-  #
-  #     d = [(num - min_d) / (max_d - min_d) for num in d]
-  #     new_data.append(d)
-  #
-  #   data = new_data
   label = [l[0] + 1 for l in label]
   return data, label
 
