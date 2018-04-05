@@ -1,0 +1,175 @@
+C:\Users\hasee\Anaconda3\python.exe D:/MyProjectsRepertory/PythonProject/NNHomework/HW3/main.py
+Extracting mnist_data\train-images-idx3-ubyte.gz
+Extracting mnist_data\train-labels-idx1-ubyte.gz
+Extracting mnist_data\t10k-images-idx3-ubyte.gz
+Extracting mnist_data\t10k-labels-idx1-ubyte.gz
+2018-04-05 15:18:25.015849: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.016151: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.016470: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE3 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.016758: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.1 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.017045: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use SSE4.2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.017330: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.017676: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use AVX2 instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.017962: W c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\platform\cpu_feature_guard.cc:45] The TensorFlow library wasn't compiled to use FMA instructions, but these are available on your machine and could speed up CPU computations.
+2018-04-05 15:18:25.346462: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:940] Found device 0 with properties:
+name: GeForce GTX 1060
+major: 6 minor: 1 memoryClockRate (GHz) 1.6705
+pciBusID 0000:01:00.0
+Total memory: 6.00GiB
+Free memory: 4.99GiB
+2018-04-05 15:18:25.346796: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:961] DMA: 0
+2018-04-05 15:18:25.346950: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:971] 0:   Y
+2018-04-05 15:18:25.347123: I c:\tf_jenkins\home\workspace\release-win\m\windows-gpu\py\35\tensorflow\core\common_runtime\gpu\gpu_device.cc:1030] Creating TensorFlow device (/gpu:0) -> (device: 0, name: GeForce GTX 1060, pci bus id: 0000:01:00.0)
+trainLoss 1.599  trainAcc 0.540
+testLoss 1.085  testAcc 0.759
+
+trainLoss 0.925  trainAcc 0.797
+testLoss 0.772  testAcc 0.832
+
+trainLoss 0.713  trainAcc 0.842
+testLoss 0.632  testAcc 0.858
+
+trainLoss 0.604  trainAcc 0.862
+testLoss 0.552  testAcc 0.872
+
+trainLoss 0.537  trainAcc 0.874
+testLoss 0.502  testAcc 0.880
+
+trainLoss 0.490  trainAcc 0.883
+testLoss 0.465  testAcc 0.889
+
+trainLoss 0.455  trainAcc 0.890
+testLoss 0.438  testAcc 0.892
+
+trainLoss 0.427  trainAcc 0.895
+testLoss 0.415  testAcc 0.895
+
+trainLoss 0.405  trainAcc 0.901
+testLoss 0.397  testAcc 0.898
+
+trainLoss 0.386  trainAcc 0.904
+testLoss 0.382  testAcc 0.901
+
+trainLoss 0.370  trainAcc 0.908
+testLoss 0.368  testAcc 0.905
+
+trainLoss 0.355  trainAcc 0.911
+testLoss 0.357  testAcc 0.906
+
+trainLoss 0.343  trainAcc 0.913
+testLoss 0.347  testAcc 0.909
+
+trainLoss 0.332  trainAcc 0.916
+testLoss 0.339  testAcc 0.910
+
+trainLoss 0.322  trainAcc 0.918
+testLoss 0.331  testAcc 0.912
+
+trainLoss 0.313  trainAcc 0.920
+testLoss 0.325  testAcc 0.913
+
+trainLoss 0.305  trainAcc 0.922
+testLoss 0.319  testAcc 0.914
+
+trainLoss 0.297  trainAcc 0.924
+testLoss 0.314  testAcc 0.914
+
+trainLoss 0.290  trainAcc 0.926
+testLoss 0.308  testAcc 0.916
+
+trainLoss 0.284  trainAcc 0.927
+testLoss 0.305  testAcc 0.916
+
+trainLoss 0.279  trainAcc 0.929
+testLoss 0.301  testAcc 0.917
+
+trainLoss 0.273  trainAcc 0.930
+testLoss 0.297  testAcc 0.919
+
+trainLoss 0.268  trainAcc 0.931
+testLoss 0.293  testAcc 0.918
+
+trainLoss 0.263  trainAcc 0.933
+testLoss 0.290  testAcc 0.919
+
+trainLoss 0.259  trainAcc 0.933
+testLoss 0.287  testAcc 0.920
+
+trainLoss 0.255  trainAcc 0.935
+testLoss 0.284  testAcc 0.921
+
+trainLoss 0.251  trainAcc 0.935
+testLoss 0.282  testAcc 0.920
+
+trainLoss 0.247  trainAcc 0.936
+testLoss 0.279  testAcc 0.922
+
+trainLoss 0.244  trainAcc 0.937
+testLoss 0.277  testAcc 0.922
+
+trainLoss 0.240  trainAcc 0.938
+testLoss 0.275  testAcc 0.922
+
+trainLoss 0.237  trainAcc 0.938
+testLoss 0.272  testAcc 0.923
+
+trainLoss 0.234  trainAcc 0.939
+testLoss 0.271  testAcc 0.924
+
+trainLoss 0.231  trainAcc 0.940
+testLoss 0.269  testAcc 0.923
+
+trainLoss 0.229  trainAcc 0.941
+testLoss 0.268  testAcc 0.924
+
+trainLoss 0.226  trainAcc 0.941
+testLoss 0.266  testAcc 0.924
+
+trainLoss 0.223  trainAcc 0.942
+testLoss 0.264  testAcc 0.924
+
+trainLoss 0.221  trainAcc 0.943
+testLoss 0.263  testAcc 0.926
+
+trainLoss 0.219  trainAcc 0.943
+testLoss 0.261  testAcc 0.926
+
+trainLoss 0.216  trainAcc 0.944
+testLoss 0.259  testAcc 0.926
+
+trainLoss 0.214  trainAcc 0.945
+testLoss 0.259  testAcc 0.926
+
+trainLoss 0.212  trainAcc 0.945
+testLoss 0.257  testAcc 0.926
+
+trainLoss 0.210  trainAcc 0.946
+testLoss 0.256  testAcc 0.925
+
+trainLoss 0.208  trainAcc 0.946
+testLoss 0.255  testAcc 0.926
+
+trainLoss 0.206  trainAcc 0.947
+testLoss 0.253  testAcc 0.927
+
+trainLoss 0.204  trainAcc 0.947
+testLoss 0.252  testAcc 0.927
+
+trainLoss 0.203  trainAcc 0.948
+testLoss 0.252  testAcc 0.926
+
+trainLoss 0.201  trainAcc 0.948
+testLoss 0.251  testAcc 0.927
+
+trainLoss 0.199  trainAcc 0.949
+testLoss 0.250  testAcc 0.928
+
+trainLoss 0.198  trainAcc 0.949
+testLoss 0.249  testAcc 0.927
+
+trainLoss 0.196  trainAcc 0.950
+testLoss 0.248  testAcc 0.928
+
+200	0.001	0.9282000660896301	125.78402495384216
+
+Process finished with exit code 0

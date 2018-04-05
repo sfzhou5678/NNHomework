@@ -16,8 +16,8 @@ class MnistModel(object):
     input_dim = config.input_dim
 
     if config.model_type == 'MLP':
-      self.input = tf.placeholder(dtype=tf.float32, shape=[None, input_dim], name='input')
-      self.label = tf.placeholder(dtype=tf.int32, shape=[None], name='label')
+      self.input = tf.placeholder(dtype=tf.float32, shape=[config.batch_size, input_dim], name='input')
+      self.label = tf.placeholder(dtype=tf.int32, shape=[config.batch_size], name='label')
 
       self.logits = self._get_mlp_logits(self.input, config)
     elif config.model_type == 'LeNet':
@@ -46,27 +46,62 @@ class MnistModel(object):
     DEPTH1 = 16
     DEPTH2 = DEPTH1 * 2
 
-    network = slim.conv2d(input, DEPTH1, 5)
-    network = slim.conv2d(network, DEPTH2, 5)
-
-    network = slim.flatten(network)
-    network = slim.fully_connected(network, 120, activation_fn=tf.nn.relu)
-    network = slim.fully_connected(network, 84, activation_fn=tf.nn.relu)
-    network = slim.fully_connected(network, config.output_dim, activation_fn=tf.nn.relu)
-
-    # # 以前的自制conv工具模块(效果比slim略差1%(97.5%), 但是速度快一倍(75s))
-    # network = conv_2d(input, [5, 5, config.input_dim, DEPTH1], [DEPTH1], [1, 1, 1, 1], 'layer1-conv', padding='VALID')
-    # network = max_pool_2d(network, [1, 2, 2, 1], [1, 2, 2, 1], 'layer2-pool')
-    # network = conv_2d(network, [5, 5, DEPTH1, DEPTH2], [DEPTH2], [1, 1, 1, 1], 'layer3-conv', padding='VALID')
-    # network = max_pool_2d(network, [1, 2, 2, 1], [1, 2, 2, 1], 'layer4-pool')
+    # network = slim.conv2d(input, DEPTH1, 5)
+    # network = slim.conv2d(network, DEPTH2, 5)
     #
-    # pool_shape = network.get_shape().as_list()
-    # nodes = pool_shape[1] * pool_shape[2] * pool_shape[3]
-    # network = tf.reshape(network, [-1, nodes])
-    # network = fully_connected('layer5-fc', network, [nodes, 120], [120], regularizer=None, need_dropout=False)
-    # network = fully_connected('layer6-fc', network, [120, 84], [84], regularizer=None, need_dropout=False)
-    # network = fully_connected('layer7-fc', network, [84, config.output_dim], [config.output_dim], regularizer=None,
-    #                           need_dropout=False, act_function=None)
+    # network = slim.flatten(network)
+    # network = slim.fully_connected(network, 120, activation_fn=tf.nn.relu)
+    # network = slim.fully_connected(network, 84, activation_fn=tf.nn.relu)
+    # network = slim.fully_connected(network, config.output_dim, activation_fn=tf.nn.relu)
+
+    # 以前的自制conv工具模块(效果比slim略差1%(97.5%), 但是速度快一倍(75s))
+    network = conv_2d(input, [5, 5, config.input_dim, DEPTH1], [DEPTH1], [1, 1, 1, 1], 'layer1-conv', padding='VALID')
+    # with tf.variable_scope('layer1-conv'):
+    #   w1 = weight_variable([5, 5, config.input_dim, DEPTH1])
+    #   b1 = bias_variable([DEPTH1])
+    #   network = tf.nn.conv2d(input, w1, strides=[1, 1, 1, 1], padding='VALID')
+    #   network = tf.nn.bias_add(network, b1)
+    #   network = tf.nn.relu(network)
+    #
+    #   with tf.variable_scope('visualization'):
+    #     # scale weights to [0 1], type is still float
+    #     x_min = tf.reduce_min(w1)
+    #     x_max = tf.reduce_max(w1)
+    #     kernel_0_to_1 = (w1 - x_min) / (x_max - x_min)
+    #     kernel_transposed = tf.transpose(kernel_0_to_1, [3, 0, 1, 2])
+    #     tf.summary.image('layer1-conv/filters', kernel_transposed, max_outputs=3)
+    #     layer1_image1 = network[0:1, :, :, 0:16]
+    #     layer1_image1 = tf.transpose(layer1_image1, perm=[3, 1, 2, 0])
+    #     tf.summary.image("filtered_images_layer1", layer1_image1, max_outputs=16)
+
+    network = max_pool_2d(network, [1, 2, 2, 1], [1, 2, 2, 1], 'layer2-pool')
+    network = conv_2d(network, [5, 5, DEPTH1, DEPTH2], [DEPTH2], [1, 1, 1, 1], 'layer3-conv', padding='VALID')
+    # with tf.variable_scope('layer3-conv'):
+    #   w1 = weight_variable([5, 5, DEPTH1, DEPTH2])
+    #   b1 = bias_variable([DEPTH2])
+    #   network = tf.nn.conv2d(network, w1, strides=[1, 1, 1, 1], padding='VALID')
+    #   network = tf.nn.bias_add(network, b1)
+    #   network = tf.nn.relu(network)
+    #
+    #   with tf.variable_scope('visualization'):
+    #     # scale weights to [0 1], type is still float
+    #     x_min = tf.reduce_min(w1)
+    #     x_max = tf.reduce_max(w1)
+    #     kernel_0_to_1 = (w1 - x_min) / (x_max - x_min)
+    #     # kernel_transposed = tf.transpose(kernel_0_to_1, [3, 0, 1, 2])
+    #     # tf.summary.image('layer3-conv/filters', kernel_transposed, max_outputs=3)
+    #     layer1_image1 = network[0:1, :, :, 0:16]
+    #     layer1_image1 = tf.transpose(layer1_image1, perm=[3, 1, 2, 0])
+    #     tf.summary.image("filtered_images_layer3", layer1_image1, max_outputs=16)
+    network = max_pool_2d(network, [1, 2, 2, 1], [1, 2, 2, 1], 'layer4-pool')
+
+    pool_shape = network.get_shape().as_list()
+    nodes = pool_shape[1] * pool_shape[2] * pool_shape[3]
+    network = tf.reshape(network, [-1, nodes])
+    network = fully_connected('layer5-fc', network, [nodes, 120], [120], regularizer=None, need_dropout=False)
+    network = fully_connected('layer6-fc', network, [120, 84], [84], regularizer=None, need_dropout=False)
+    network = fully_connected('layer7-fc', network, [84, config.output_dim], [config.output_dim], regularizer=None,
+                              need_dropout=False, act_function=None)
 
     logits = network
     return logits
@@ -109,7 +144,7 @@ epoch = 0
 
 
 def run_epoch(data, label, batch_size,
-              sess, model, summary_wirite):
+              sess, model, summary_writer):
   global epoch
 
   times = len(label) // batch_size
@@ -128,10 +163,11 @@ def run_epoch(data, label, batch_size,
     _, loss, acc, summary = sess.run([model.train_op, model.loss, model.acc, model.summary],
                                      {model.input: input_data,
                                       model.label: target_label})
-    summary_wirite.add_summary(summary, epoch * times + i)
+    summary_writer.add_summary(summary, epoch * times + i)
+    # summary_writer.flush()
     loss_sum += loss
     acc_sum += acc
-  print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
+  # print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
   epoch += 1
 
 
@@ -152,54 +188,57 @@ def train_MLP():
   train_data = np.reshape(train_data, newshape=[-1, 28 * 28])
   test_data = np.reshape(test_data, newshape=[-1, 28 * 28])
 
-  hidden_size = 200
-  lr = 1e-3
-  lr_no = 1
-
-  train_config = MLPConfig(64, hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
-  test_config = MLPConfig(len(test_label), hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
-
-  initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
-  with tf.name_scope('Train'):
-    with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=None, initializer=initializer):
-      train_model = MnistModel(config=train_config)
-
-  with tf.name_scope('Valid'):
-    with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
-      test_model = MnistModel(config=test_config)
-
   log_path = 'mlplog'
   writer = tf.summary.FileWriter(log_path, graph=tf.get_default_graph())
-  sess_config = tf.ConfigProto()
-  sess_config.gpu_options.allow_growth = True
-  with tf.Session(config=sess_config) as sess:
-    tf.global_variables_initializer().run()
-    coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-    time0 = time.time()
-    best_test_acc = 0
+  res_file = open('res_file.log', 'w')
+  lr_list = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
+  for hidden_size in range(10, 210, 20):
+    for lr, lr_no in zip(lr_list, range(len(lr_list))):
+      train_config = MLPConfig(64, hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
+      test_config = MLPConfig(len(test_label), hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
 
-    for i in range(50):
-      run_epoch(train_data, train_label, train_config.batch_size,
-                sess, train_model, writer)
+      initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
+      with tf.name_scope('Train'):
+        with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=None, initializer=initializer):
+          train_model = MnistModel(config=train_config)
 
-      test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
-                                     {test_model.input: test_data,
-                                      test_model.label: test_label})
-      print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
-      print()
-      best_test_acc = max(best_test_acc, test_acc)
+      with tf.name_scope('Valid'):
+        with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
+          test_model = MnistModel(config=test_config)
 
-    # hidden_size, learning_rate, best_test_acc
-    used_time = time.time() - time0
-    print('{}\t{}\t{}\t{}'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
-    # res_file.write(
-    #   '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
-    # res_file.flush()
+      sess_config = tf.ConfigProto()
+      sess_config.gpu_options.allow_growth = True
+      with tf.Session(config=sess_config) as sess:
+        tf.global_variables_initializer().run()
+        coord = tf.train.Coordinator()
+        threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-    coord.request_stop()
-    coord.join(threads)
+        time0 = time.time()
+        best_test_acc = 0
+
+        for i in range(20):
+          run_epoch(train_data, train_label, train_config.batch_size,
+                    sess, train_model, writer)
+
+          test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
+                                         {test_model.input: test_data,
+                                          test_model.label: test_label})
+          # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
+          # print()
+          best_test_acc = max(best_test_acc, test_acc)
+
+        # hidden_size, learning_rate, best_test_acc
+        used_time = time.time() - time0
+        print('{}\t{}\t{}\t{}'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+        res_file.write(
+          '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+        res_file.flush()
+        writer.flush()
+
+        coord.request_stop()
+        coord.join(threads)
+      tf.reset_default_graph()
 
 
 def trainLeNet():
@@ -260,11 +299,13 @@ def trainLeNet():
     # res_file.write(
     #   '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
     # res_file.flush()
-
     coord.request_stop()
     coord.join(threads)
 
 
 if __name__ == '__main__':
+  tf.set_random_seed(2)
+  np.random.seed(2)
+
   train_MLP()
   # trainLeNet()
