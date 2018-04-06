@@ -35,11 +35,11 @@ def standard_svm(data_source):
   clf = SVC(kernel='rbf', C=1.0, probability=True)
   clf.decision_function_shape = 'ovr'
   clf.fit(train_data, train_label)
-  # print(clf.predict_proba(test_data))
+
   pred = clf.predict(test_data)
   print(pred)
 
-  accuracy = accuracy_score(test_label, pred)  # 计算精确度
+  accuracy = accuracy_score(test_label, pred)
   print(accuracy)
   print(time.time() - time0)
 

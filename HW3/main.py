@@ -191,54 +191,57 @@ def train_MLP():
   log_path = 'mlplog'
   writer = tf.summary.FileWriter(log_path, graph=tf.get_default_graph())
 
-  res_file = open('res_file.log', 'w')
-  lr_list = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
-  for hidden_size in range(10, 210, 20):
-    for lr, lr_no in zip(lr_list, range(len(lr_list))):
-      train_config = MLPConfig(64, hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
-      test_config = MLPConfig(len(test_label), hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
+  # res_file = open('res_file.log', 'w')
+  hidden_size=200
+  lr=1e-2
+  lr_no=1
+  # lr_list = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
+  # for hidden_size in range(10, 210, 20):
+  #   for lr, lr_no in zip(lr_list, range(len(lr_list))):
+  train_config = MLPConfig(64, hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
+  test_config = MLPConfig(len(test_label), hidden_size=hidden_size, learnig_rate=lr, model_type='MLP')
 
-      initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
-      with tf.name_scope('Train'):
-        with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=None, initializer=initializer):
-          train_model = MnistModel(config=train_config)
+  initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
+  with tf.name_scope('Train'):
+    with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=None, initializer=initializer):
+      train_model = MnistModel(config=train_config)
 
-      with tf.name_scope('Valid'):
-        with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
-          test_model = MnistModel(config=test_config)
+  with tf.name_scope('Valid'):
+    with tf.variable_scope("Model-%d-%d" % (hidden_size, lr_no), reuse=True):
+      test_model = MnistModel(config=test_config)
 
-      sess_config = tf.ConfigProto()
-      sess_config.gpu_options.allow_growth = True
-      with tf.Session(config=sess_config) as sess:
-        tf.global_variables_initializer().run()
-        coord = tf.train.Coordinator()
-        threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+  sess_config = tf.ConfigProto()
+  sess_config.gpu_options.allow_growth = True
+  with tf.Session(config=sess_config) as sess:
+    tf.global_variables_initializer().run()
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-        time0 = time.time()
-        best_test_acc = 0
+    time0 = time.time()
+    best_test_acc = 0
 
-        for i in range(20):
-          run_epoch(train_data, train_label, train_config.batch_size,
-                    sess, train_model, writer)
+    for i in range(20):
+      run_epoch(train_data, train_label, train_config.batch_size,
+                sess, train_model, writer)
 
-          test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
-                                         {test_model.input: test_data,
-                                          test_model.label: test_label})
-          # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
-          # print()
-          best_test_acc = max(best_test_acc, test_acc)
+      test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
+                                     {test_model.input: test_data,
+                                      test_model.label: test_label})
+      # writer.flush()
+      # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
+      # print()
+      best_test_acc = max(best_test_acc, test_acc)
 
-        # hidden_size, learning_rate, best_test_acc
-        used_time = time.time() - time0
-        print('{}\t{}\t{}\t{}'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
-        res_file.write(
-          '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
-        res_file.flush()
-        writer.flush()
+    # hidden_size, learning_rate, best_test_acc
+    used_time = time.time() - time0
+    print('{}\t{}\t{}\t{}'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+    # res_file.write(
+    #   '{}\t{}\t{}\t{}\n'.format(train_config.hidden_size, train_config.learning_rate, best_test_acc, used_time))
+    # res_file.flush()
 
-        coord.request_stop()
-        coord.join(threads)
-      tf.reset_default_graph()
+    coord.request_stop()
+    coord.join(threads)
+  # tf.reset_default_graph()
 
 
 def trainLeNet():
@@ -307,5 +310,5 @@ if __name__ == '__main__':
   tf.set_random_seed(2)
   np.random.seed(2)
 
-  train_MLP()
-  # trainLeNet()
+  # train_MLP()
+  trainLeNet()
