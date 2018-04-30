@@ -25,9 +25,9 @@ class Config(object):
 
     self.rnn_layers = 2
     self.keep_prob = 0.5
-    self.learning_rate = 1e-2
+    self.learning_rate = 1e-1
     self.lr_decay = 0.95
-    self.max_grad_norm = 5
+    self.max_grad_norm = 2
     self.init_scale = 0.05
 
 
@@ -77,6 +77,7 @@ class LSTM(object):
     trainable_variables = tf.trainable_variables()
     grads, _ = tf.clip_by_global_norm(tf.gradients(self.loss, trainable_variables), config.max_grad_norm)
     optimizer = tf.train.AdamOptimizer(learning_rate)
+    # optimizer = tf.train.GradientDescentOptimizer(learning_rate)
     self.train_op = optimizer.apply_gradients(zip(grads, trainable_variables))
 
     # acc
@@ -108,17 +109,18 @@ def run_epoch(data, label, batch_size,
 
 
 if __name__ == '__main__':
-  num_steps = 150
+  num_steps = 100
 
   data_folder = 'hw4_data'
-  train_data, test_data = read_data(os.path.join(data_folder, '01.npz'), num_steps)
+  train_data, train_label, \
+  test_data, test_label = read_data(os.path.join(data_folder, '01.npz'),
+                                    os.path.join(data_folder, 'label.npy'),
+                                    num_steps=num_steps, num_sample=100)
 
-  # FIXME: 临时的label读取，应该和data合到一块
-  label = np.load(os.path.join(data_folder, 'label.npy'))
-  train_label = label[:9]
-  test_label = label[9:]
+  # test_data=train_data
+  # test_label=train_label
 
-  train_config = Config(batch_size=2, hidden_size=100, num_steps=num_steps)
+  train_config = Config(batch_size=50, hidden_size=100, num_steps=num_steps)
   test_config = Config(batch_size=len(test_label), hidden_size=100, num_steps=num_steps)
 
   initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
@@ -138,13 +140,14 @@ if __name__ == '__main__':
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
     for i in range(1000):
+      print('epoch :', i + 1)
       run_epoch(train_data, train_label, train_config.batch_size,
                 sess, train_model)
-      test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
-                                     {test_model.input: test_data,
-                                      test_model.label: test_label})
-      print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
-      print()
+      # test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
+      #                                {test_model.input: test_data,
+      #                                 test_model.label: test_label})
+      # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
+      # print()
 
     coord.request_stop()
     coord.join(threads)
