@@ -215,7 +215,7 @@ if __name__ == '__main__':
   # test_data=train_data
   # test_label=train_label
 
-  train_config = Config(batch_size=128, hidden_size=100, num_steps=num_steps)
+  train_config = Config(batch_size=32, hidden_size=100, num_steps=num_steps)
   test_config = Config(batch_size=len(test_label), hidden_size=100, num_steps=num_steps)
 
   initializer = tf.random_uniform_initializer(-train_config.init_scale, train_config.init_scale)
