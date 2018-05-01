@@ -1,5 +1,6 @@
 import os
 import random
+import time
 import tensorflow as tf
 import numpy as np
 
@@ -55,10 +56,10 @@ class Config(object):
     self.n_classes = 3
 
     self.rnn_layers = 2
-    self.keep_prob = 1.0
-    self.learning_rate = 1e-1
+    self.keep_prob = 0.5
+    self.learning_rate = 1e-3
     self.lr_decay = 0.95
-    self.max_grad_norm = 2
+    self.max_grad_norm = 5
     self.init_scale = 0.05
 
 
@@ -200,7 +201,7 @@ def run_epoch(data, label, batch_size,
                              model.label: target_label})
     loss_sum += loss
     acc_sum += acc
-  print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
+  # print('trainLoss %.3f  trainAcc %.3f' % (loss_sum / times, acc_sum / times))
 
 
 if __name__ == '__main__':
@@ -208,10 +209,14 @@ if __name__ == '__main__':
 
   data_folder = 'hw4_data'
   train_data, train_label, \
-  test_data, test_label = read_data(os.path.join(data_folder, '01.npz'),
+  test_data, test_label = read_data([os.path.join(data_folder, '01.npz'),
+                                     os.path.join(data_folder, '02.npz'),
+                                     os.path.join(data_folder, '03.npz')
+                                     ],
                                     os.path.join(data_folder, 'label.npy'),
                                     num_steps=num_steps, num_sample=100)
 
+  print(test_data.shape)
   # test_data=train_data
   # test_label=train_label
 
@@ -223,9 +228,9 @@ if __name__ == '__main__':
     with tf.variable_scope("Model", reuse=None, initializer=initializer):
       train_model = LSTM(train_config, is_training=True)
 
-  # with tf.name_scope('Test'):
-  #   with tf.variable_scope("Model", reuse=True, initializer=initializer):
-  #     test_model = LSTM(test_config, is_training=False)
+  with tf.name_scope('Test'):
+    with tf.variable_scope("Model", reuse=True, initializer=initializer):
+      test_model = LSTM(test_config, is_training=False)
 
   sess_config = tf.ConfigProto()
   sess_config.gpu_options.allow_growth = True
@@ -234,15 +239,25 @@ if __name__ == '__main__':
     coord = tf.train.Coordinator()
     threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-    for i in range(1000):
-      print('epoch :', i + 1)
+    time0 = time.time()
+    best_test_loss = 100
+    best_test_acc = 0
+    best_epoch_num = 0
+    for i in range(30):
+      # print('epoch :', i + 1)
       run_epoch(train_data, train_label, train_config.batch_size,
                 sess, train_model)
-      # test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
-      #                                {test_model.input: test_data,
-      #                                 test_model.label: test_label})
-      # print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
+      test_loss, test_acc = sess.run([test_model.loss, test_model.acc],
+                                     {test_model.input: test_data,
+                                      test_model.label: test_label})
+      print('testLoss %.3f  testAcc %.3f' % (test_loss, test_acc))
       # print()
+      if test_loss < best_test_loss:
+        best_test_loss = test_loss
+        best_test_acc = test_acc
+        best_epoch_num = i + 1
+    print('epoch:%d  besttestLoss %.3f  besttest acc%.3f' % (best_epoch_num, best_test_loss, best_test_acc))
+    print(time.time() - time0)
 
     coord.request_stop()
     coord.join(threads)
